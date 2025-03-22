@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import knex from 'knex'
+import { knex } from '@/database/knex'
 
 class TablesController {
   async index(request: Request, response: Response, next: NextFunction) {
