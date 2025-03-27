@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
 class OrdersController {
-  async create (request: Request, response: Response, next: NextFunction) {
+  async create(request: Request, response: Response, next: NextFunction) {
     try {
       const bodySchema = z.object({
         table_session_id: z.number(),
@@ -43,7 +43,7 @@ class OrdersController {
     }
   }
   
-  async index (request: Request, response: Response, next: NextFunction) {
+  async index(request: Request, response: Response, next: NextFunction) {
     try {
       const { table_session_id } = request.params
 
@@ -61,6 +61,24 @@ class OrdersController {
       .join("products", "products.id", "orders.product_id")
       .where({ table_session_id })
       .orderBy("orders.created_at", "desc")
+
+      return response.json(order)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async show(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { table_session_id } = request.params
+
+      const order = await knex("orders")
+      .select(
+        knex.raw("COALESCE(SUM(orders.price * orders.quantity), 0) AS total"),
+        knex.raw("COALESCE(SUM(orders.quantity), 0) AS quantity")
+      )
+      .where({ table_session_id })
+      .first()
 
       return response.json(order)
     } catch (error) {
