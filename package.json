@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js",
-    "start": "tsx watch src/server.ts"
+    "start": "tsx src/server.ts"
   },
   "author": "Diogo Wernek",
   "license": "ISC",
